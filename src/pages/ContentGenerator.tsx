@@ -5,12 +5,14 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw } from "lucide-react";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
 
 const ContentGenerator = () => {
   const [research, setResearch] = useState("");
   const [instructions, setInstructions] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const { toast } = useToast();
 
   const handleGenerate = async () => {
@@ -43,10 +45,10 @@ As we move forward, the focus on digital transformation will continue to shape h
     }, 2000);
   };
 
-  const handleRegenerate = () => {
+  const handleFeedbackSubmit = (feedback: string) => {
     toast({
-      title: "Regenerating content",
-      description: "Your feedback has been recorded and new content is being generated.",
+      title: "Feedback submitted",
+      description: "Your feedback has been recorded. Regenerating content...",
     });
     handleGenerate();
   };
@@ -94,7 +96,7 @@ As we move forward, the focus on digital transformation will continue to shape h
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleRegenerate}
+                onClick={() => setFeedbackOpen(true)}
                 className="text-[#ea384c]"
               >
                 <RefreshCw className="mr-2 h-4 w-4" />
@@ -114,6 +116,12 @@ As we move forward, the focus on digital transformation will continue to shape h
           )}
         </Card>
       </div>
+
+      <FeedbackDialog
+        open={feedbackOpen}
+        onOpenChange={setFeedbackOpen}
+        onSubmit={handleFeedbackSubmit}
+      />
     </div>
   );
 };
