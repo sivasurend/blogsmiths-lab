@@ -3,12 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import { RefreshCw } from "lucide-react";
 
 const ContentGenerator = () => {
   const [research, setResearch] = useState("");
   const [instructions, setInstructions] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -40,11 +43,19 @@ As we move forward, the focus on digital transformation will continue to shape h
     }, 2000);
   };
 
+  const handleRegenerate = () => {
+    toast({
+      title: "Regenerating content",
+      description: "Your feedback has been recorded and new content is being generated.",
+    });
+    handleGenerate();
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tighter">
-          Content Generator
+          Block Generator
         </h1>
         <p className="text-muted-foreground">
           Transform your research into a well-structured blog post
@@ -70,14 +81,27 @@ As we move forward, the focus on digital transformation will continue to shape h
           <Button
             onClick={handleGenerate}
             disabled={!research || !instructions || loading}
-            className="w-full"
+            className="w-full bg-[#ea384c] hover:bg-[#ea384c]/90"
           >
             {loading ? "Generating..." : "Generate Content"}
           </Button>
         </div>
 
         <Card className="p-6 animate-fadeIn">
-          <h2 className="text-xl font-semibold mb-4">Generated Content</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Generated Content</h2>
+            {content && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRegenerate}
+                className="text-[#ea384c]"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Regenerate output
+              </Button>
+            )}
+          </div>
           <Separator className="my-4" />
           {content ? (
             <div className="prose prose-sm max-w-none">

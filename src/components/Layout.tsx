@@ -1,42 +1,39 @@
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "./AppSidebar";
+import { Button } from "./ui/button";
+import { UserCircle } from "lucide-react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const location = useLocation();
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
-  const navigation = [
-    { name: "Topic Generator", path: "/" },
-    { name: "Research", path: "/research" },
-    { name: "Content Generator", path: "/content" },
-    { name: "SEO Optimizer", path: "/seo" },
-  ];
+  const toggleSignIn = () => {
+    setIsSignedIn(!isSignedIn);
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border/40 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center">
-          <div className="flex gap-6 md:gap-10">
-            {navigation.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={cn(
-                  "transition-colors hover:text-foreground/80",
-                  location.pathname === item.path
-                    ? "text-foreground"
-                    : "text-foreground/60"
-                )}
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <div className="flex-1">
+          <header className="border-b border-border/40 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="container flex h-16 items-center justify-between">
+              <SidebarTrigger />
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2"
+                onClick={toggleSignIn}
               >
-                {item.name}
-              </Link>
-            ))}
-          </div>
+                <UserCircle className="h-5 w-5" />
+                <span>{isSignedIn ? "Sign Out" : "Sign In"}</span>
+              </Button>
+            </div>
+          </header>
+          <main className="container py-6 md:py-10">
+            <div className="animate-fadeIn">{children}</div>
+          </main>
         </div>
-      </nav>
-      <main className="container py-6 md:py-10">
-        <div className="animate-fadeIn">{children}</div>
-      </main>
-    </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
