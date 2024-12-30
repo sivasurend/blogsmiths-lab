@@ -23,7 +23,7 @@ const items = [
     icon: BookOpen,
   },
   {
-    title: "Block Generator",
+    title: "Blog Post Generator",
     url: "/content",
     icon: PenTool,
   },
